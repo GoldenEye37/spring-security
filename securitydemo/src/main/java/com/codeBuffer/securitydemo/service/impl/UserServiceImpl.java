@@ -1,7 +1,9 @@
 package com.codeBuffer.securitydemo.service.impl;
 
+import com.codeBuffer.securitydemo.Entity.PasswordResetToken;
 import com.codeBuffer.securitydemo.Entity.User;
 import com.codeBuffer.securitydemo.Entity.VerificationToken;
+import com.codeBuffer.securitydemo.Repository.PasswordResetTokenRepository;
 import com.codeBuffer.securitydemo.Repository.UserRepository;
 import com.codeBuffer.securitydemo.Repository.VerificationTokenRepository;
 import com.codeBuffer.securitydemo.model.UserModel;
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -77,5 +82,18 @@ public class UserServiceImpl implements UserService {
         verificationTokenRepository.save(verificationToken);
 
         return verificationToken;
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken passwordResetToken
+                = new PasswordResetToken(user, token);
+        passwordResetTokenRepository.save(passwordResetToken);
+
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
