@@ -10,9 +10,11 @@ import com.codeBuffer.securitydemo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -101,6 +103,23 @@ public class RegistrationController {
         log.info("Click the link to reser your password: {}",
                 url);
         return url;
+    }
+
+    @PostMapping("/savePassword")
+    public String savePassword(@RequestParam("token") String token,
+                               @RequestBody PasswordModel passwordModel){
+        String result = userService.validatePasswordResetToken(token);
+        if(!result.equalsIgnoreCase("valid")){
+            return "Invalid Token";
+        }
+        Optional<User> user = userService.getUserByPasswordResetToken(token);
+        if(user.isPresent()){
+            userService.changePassword(user.get(), passwordModel.getNewPassword());
+            return "Password reset successfull";
+        }
+        else {
+            return "Invalid Token";
+        }
     }
 
     private String applicationUrl(HttpServletRequest request) {
