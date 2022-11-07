@@ -2,6 +2,7 @@ package com.codeBuffer.securitydemo.service;
 
 
 import com.codeBuffer.securitydemo.Entity.User;
+import com.codeBuffer.securitydemo.Entity.VerificationToken;
 import com.codeBuffer.securitydemo.model.UserModel;
 import org.springframework.stereotype.Service;
 
@@ -11,4 +12,6 @@ public interface UserService {
     void saveVerificationTokenForUser(String token, User user);
 
     String validateVerificationToken(String token);
+
+    VerificationToken generateNewVerificationToken(String oldToken);
 }
