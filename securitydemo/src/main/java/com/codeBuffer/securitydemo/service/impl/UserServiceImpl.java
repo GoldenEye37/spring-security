@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
             return "Expired";
         }
 
-
-
-        return null;
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "valid";
     }
 }
