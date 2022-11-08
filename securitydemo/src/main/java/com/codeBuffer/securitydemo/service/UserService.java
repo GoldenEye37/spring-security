@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 public interface UserService {
+
     User registerUser(UserModel userModel);
 
     void saveVerificationTokenForUser(String token, User user);
@@ -26,4 +27,6 @@ public interface UserService {
     Optional<User> getUserByPasswordResetToken(String token);
 
     void changePassword(User user, String newPassword);
+
+    boolean checkIfValidOldPassword(User user, String oldPassword);
 }

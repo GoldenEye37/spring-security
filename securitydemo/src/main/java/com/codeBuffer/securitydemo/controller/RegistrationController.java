@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.expression.spel.ast.OpAnd;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,7 @@ public class RegistrationController {
     @PostMapping("/resetPassword")
     public String resetPassword(@RequestBody PasswordModel passwordModel,
                                 HttpServletRequest request){
+
         User user = userService.findUserByEmail(passwordModel.getEmail());
         String url = "";
         if(user!=null){
@@ -88,6 +90,19 @@ public class RegistrationController {
         }
 
         return url;
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestBody PasswordModel passwordModel){
+        User user = userService.findUserByEmail(passwordModel.getEmail());
+
+        if(!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())){
+            return "Invalid Old Password";
+        }
+
+        // save new Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "Password Changed Successfully";
     }
 
     private String passwordResetTokenMail(User user, String applicationUrl,
