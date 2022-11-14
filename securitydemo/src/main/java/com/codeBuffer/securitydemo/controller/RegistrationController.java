@@ -115,7 +115,7 @@ public class RegistrationController {
                         +token;
 
         //sendVerificationEmail()
-        log.info("Click the link to reser your password: {}",
+        log.info("Click the link to reset your password: {}",
                 url);
         return url;
     }
