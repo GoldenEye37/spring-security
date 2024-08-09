@@ -1,12 +1,15 @@
-package com.codeBuffer.securitydemo.Entity;
+package com.codeBuffer.securitydemo.entity;
 
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id

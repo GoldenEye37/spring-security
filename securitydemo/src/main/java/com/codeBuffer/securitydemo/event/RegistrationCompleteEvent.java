@@ -1,6 +1,6 @@
 package com.codeBuffer.securitydemo.event;
 
-import com.codeBuffer.securitydemo.Entity.User;
+import com.codeBuffer.securitydemo.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

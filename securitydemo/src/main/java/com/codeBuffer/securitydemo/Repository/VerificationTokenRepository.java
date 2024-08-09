@@ -1,6 +1,6 @@
 package com.codeBuffer.securitydemo.Repository;
 
-import com.codeBuffer.securitydemo.Entity.VerificationToken;
+import com.codeBuffer.securitydemo.entity.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

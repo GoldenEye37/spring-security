@@ -1,6 +1,6 @@
 package com.codeBuffer.securitydemo.event;
 
-import com.codeBuffer.securitydemo.Entity.User;
+import com.codeBuffer.securitydemo.entity.User;
 import com.codeBuffer.securitydemo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
