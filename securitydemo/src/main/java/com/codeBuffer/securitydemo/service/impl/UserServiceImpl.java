@@ -19,13 +19,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
-
     private final VerificationTokenRepository verificationTokenRepository;
-
     private final PasswordResetTokenRepository passwordResetTokenRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Override
