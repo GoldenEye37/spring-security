@@ -1,4 +1,4 @@
-package com.codeBuffer.securitydemo.exception;
+package com.codeBuffer.securitydemo.exception.ex;
 
 /**
  * @author <a href="mailto:developer.wadu@gmail.com">Willdom Kahari</a>
