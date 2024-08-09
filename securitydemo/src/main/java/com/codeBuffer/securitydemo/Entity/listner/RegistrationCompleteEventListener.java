@@ -3,22 +3,21 @@ package com.codeBuffer.securitydemo.Entity.listner;
 import com.codeBuffer.securitydemo.Entity.User;
 import com.codeBuffer.securitydemo.Event.RegistrationCompleteEvent;
 import com.codeBuffer.securitydemo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import java.util.EventListener;
 import java.util.UUID;
 
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class RegistrationCompleteEventListener implements
         ApplicationListener<RegistrationCompleteEvent> {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
 
     @Override

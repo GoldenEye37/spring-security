@@ -8,7 +8,7 @@ import com.codeBuffer.securitydemo.Repository.UserRepository;
 import com.codeBuffer.securitydemo.Repository.VerificationTokenRepository;
 import com.codeBuffer.securitydemo.model.UserModel;
 import com.codeBuffer.securitydemo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +17,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
 
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User registerUser(UserModel userModel) {

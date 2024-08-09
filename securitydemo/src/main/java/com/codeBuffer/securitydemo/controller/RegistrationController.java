@@ -7,11 +7,9 @@ import com.codeBuffer.securitydemo.Event.RegistrationCompleteEvent;
 import com.codeBuffer.securitydemo.model.PasswordModel;
 import com.codeBuffer.securitydemo.model.UserModel;
 import com.codeBuffer.securitydemo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.expression.spel.ast.OpAnd;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +18,12 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel userModel,
