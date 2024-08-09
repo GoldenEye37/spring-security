@@ -3,9 +3,8 @@ package com.codeBuffer.securitydemo.service;
 
 import com.codeBuffer.securitydemo.entity.User;
 import com.codeBuffer.securitydemo.entity.VerificationToken;
+import com.codeBuffer.securitydemo.model.GenericResponse;
 import com.codeBuffer.securitydemo.model.UserModel;
-
-import java.util.Optional;
 
 public interface UserService {
 
@@ -13,7 +12,7 @@ public interface UserService {
 
     void saveVerificationTokenForUser(String token, User user);
 
-    String validateVerificationToken(String token);
+    GenericResponse validateVerificationToken(String token);
 
     VerificationToken generateNewVerificationToken(String oldToken);
 
@@ -21,9 +20,9 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    String validatePasswordResetToken(String token);
+    void validatePasswordResetToken(String token);
 
-    Optional<User> getUserByPasswordResetToken(String token);
+    User getUserByPasswordResetToken(String token);
 
     void changePassword(User user, String newPassword);
 

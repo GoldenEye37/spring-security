@@ -3,17 +3,20 @@ package com.codeBuffer.securitydemo.service.impl;
 import com.codeBuffer.securitydemo.entity.PasswordResetToken;
 import com.codeBuffer.securitydemo.entity.User;
 import com.codeBuffer.securitydemo.entity.VerificationToken;
-import com.codeBuffer.securitydemo.Repository.PasswordResetTokenRepository;
-import com.codeBuffer.securitydemo.Repository.UserRepository;
-import com.codeBuffer.securitydemo.Repository.VerificationTokenRepository;
+import com.codeBuffer.securitydemo.repository.PasswordResetTokenRepository;
+import com.codeBuffer.securitydemo.repository.UserRepository;
+import com.codeBuffer.securitydemo.repository.VerificationTokenRepository;
+import com.codeBuffer.securitydemo.exception.NotFoundException;
+import com.codeBuffer.securitydemo.exception.ExpiredException;
+import com.codeBuffer.securitydemo.model.GenericResponse;
 import com.codeBuffer.securitydemo.model.UserModel;
 import com.codeBuffer.securitydemo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,49 +35,45 @@ public class UserServiceImpl implements UserService {
         user.setSurname(userModel.getSurname());
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(userModel.getPassword()));
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
     public void saveVerificationTokenForUser(String token, User user) {
-        VerificationToken verificationToken
-                = new VerificationToken(user, token);
-
+        VerificationToken verificationToken = new VerificationToken(user, token);
         verificationTokenRepository.save(verificationToken);
     }
 
     @Override
-    public String validateVerificationToken(String token) {
-        VerificationToken verificationToken
-                = verificationTokenRepository.findByToken(token);
-
-        if(verificationToken == null){
-            return "invalid";
-        }
+    public GenericResponse validateVerificationToken(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("Token %s is invalid.", token))
+                );
 
         User user = verificationToken.getUser();
         Calendar cal = Calendar.getInstance();
 
-        if((verificationToken.getExpirationTime().getTime()
-                - cal.getTime().getTime()) <= 0)  {
+        if ((verificationToken.getExpirationTime().getTime()
+                - cal.getTime().getTime()) <= 0) {
             verificationTokenRepository.delete(verificationToken);
-            return "Expired";
+            throw new ExpiredException("Token Expired");
         }
 
         user.setEnabled(true);
         userRepository.save(user);
-        return "valid";
+        return new GenericResponse(true, "User Verified Successfully.");
     }
 
     @Override
     public VerificationToken generateNewVerificationToken(String oldToken) {
-        VerificationToken verificationToken =
-                verificationTokenRepository.findByToken(oldToken);
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(oldToken)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("Token %s is invalid.", oldToken))
+                );
 
         verificationToken.setToken(UUID.randomUUID().toString());
         verificationTokenRepository.save(verificationToken);
-
         return verificationToken;
     }
 
@@ -88,32 +87,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", email)));
     }
 
     @Override
-    public String validatePasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken
-                = passwordResetTokenRepository.findByToken(token);
+    public void validatePasswordResetToken(String token) {
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new NotFoundException("Password reset token not found."));
 
-        if(passwordResetToken == null){
-            return "invalid";
-        }
-
-        User user = passwordResetToken.getUser();
         Calendar cal = Calendar.getInstance();
 
-        if((passwordResetToken.getExpirationTime().getTime()
-                - cal.getTime().getTime()) <= 0)  {
+        if ((passwordResetToken.getExpirationTime().getTime()
+                - cal.getTime().getTime()) <= 0) {
             passwordResetTokenRepository.delete(passwordResetToken);
-            return "Expired";
+            throw new ExpiredException("Reset Token Expired.");
         }
-        return "valid";
     }
 
     @Override
-    public Optional<User> getUserByPasswordResetToken(String token) {
-        return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser());
+    public User getUserByPasswordResetToken(String token) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
+                .orElseThrow(()-> new NotFoundException("No password reset token found."));
+        return resetToken.getUser();
     }
 
     @Override
