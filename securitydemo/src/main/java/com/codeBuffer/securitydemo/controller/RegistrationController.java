@@ -3,7 +3,7 @@ package com.codeBuffer.securitydemo.controller;
 
 import com.codeBuffer.securitydemo.Entity.User;
 import com.codeBuffer.securitydemo.Entity.VerificationToken;
-import com.codeBuffer.securitydemo.Event.RegistrationCompleteEvent;
+import com.codeBuffer.securitydemo.event.RegistrationCompleteEvent;
 import com.codeBuffer.securitydemo.model.PasswordModel;
 import com.codeBuffer.securitydemo.model.UserModel;
 import com.codeBuffer.securitydemo.service.UserService;

@@ -1,11 +1,10 @@
-package com.codeBuffer.securitydemo.Entity.listner;
+package com.codeBuffer.securitydemo.event;
 
 import com.codeBuffer.securitydemo.Entity.User;
-import com.codeBuffer.securitydemo.Event.RegistrationCompleteEvent;
 import com.codeBuffer.securitydemo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -14,14 +13,13 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RegistrationCompleteEventListener implements
-        ApplicationListener<RegistrationCompleteEvent> {
+public class RegistrationCompleteEventListener{
 
     private final UserService userService;
 
 
-    @Override
-    public void onApplicationEvent(RegistrationCompleteEvent event) {
+    @EventListener
+    public void onRegistrationCompleteEvent(RegistrationCompleteEvent event) {
         // create verification token to User with link
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
