@@ -1,19 +1,18 @@
-package com.codeBuffer.securitydemo.Entity;
+package com.codeBuffer.securitydemo.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class PasswordResetToken {
+@NoArgsConstructor
+public class VerificationToken {
 
     private static final int EXPIRATION_TIME=10;
 
@@ -29,18 +28,18 @@ public class PasswordResetToken {
     @JoinColumn(
             name = "user_id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_USER_PASSWORD_TOKEN")
+            foreignKey = @ForeignKey(name = "FK_USER_VERIFICATION_TOKEN")
     )
     private User user;
 
-    public PasswordResetToken(User user, String token){
+    public  VerificationToken(User user, String token){
         super();
         this.token = token;
         this.user = user;
         this.expirationTime = calculateExpirationDate(EXPIRATION_TIME);
     }
 
-    public PasswordResetToken(String token){
+    public VerificationToken(String token){
         super();
         this.token = token;
         this.expirationTime =  calculateExpirationDate(EXPIRATION_TIME);
@@ -53,5 +52,4 @@ public class PasswordResetToken {
         calendar.add(Calendar.MINUTE, expirationTime);
         return new Date(calendar.getTime().getTime());
     }
-
 }
